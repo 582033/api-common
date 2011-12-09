@@ -89,4 +89,26 @@ function image_thumb($file, $thumb_file, $max_width, $max_height, $crop) { //{{{
 	}
 	return TRUE;
 } //}}}
+function image_resize($image, $imgInfo, $width, $height) { # {{{
+	$newImg = imagecreatetruecolor($width, $height);
+
+	/* Check if this image is PNG or GIF, then set if Transparent*/
+	if(($imgInfo[2] == 1) OR ($imgInfo[2]==3)){
+		imagealphablending($newImg, false);
+		imagesavealpha($newImg,true);
+		$transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
+		imagefilledrectangle($newImg, 0, 0, $width, $height, $transparent);
+	}
+	imagecopyresampled($newImg, $image, 0, 0, 0, 0, $width, $height, $imgInfo[0], $imgInfo[1]);
+
+	return $newImg;
+} # }}}
+function image_add_logo($image, $logo_file) { //{{{
+	imagealphablending($image, TRUE);
+	$logo_img = imagecreatefrompng($logo_file);
+	$logow = imagesx($logo_img);
+	$logoh = imagesy($logo_img);
+	imagecopy($image, $logo_img, 0, imagesy($image) - $logoh, 0, 0, $logow, $logoh);
+	return $image;
+} //}}}
 // vim: fdm=marker
