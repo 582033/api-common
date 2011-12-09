@@ -48,47 +48,8 @@ function normalize_url($url) {
 	return $url;
 }
 
-function get_youku_key($url) {
-	$matches = array();
-	$key = NULL;
-	$r = preg_match('#^http://f.youku.com/.*K=([a-zA-Z0-9]+)$#', $url, $matches);
-	if ($r) {
-		$key = $matches[1];
-	}
-	return $key;
-}
-function replace_youku_key($url, $key) {
-	$r = preg_match('#^(http://f.youku.com/.*K=)([a-zA-Z0-9]+)$#', $url, $matches);
-	if ($r) {
-		$url = $matches[1] . $key;
-	}
-	return $url;
-}
-
-function get_joy_key($url) {
-	$matches = array();
-	$key = NULL;
-	$r = preg_match('#^http://[^/]+/([a-zA-Z0-9]+)/#', $url, $matches);
-	if ($r) {
-		$key = $matches[1];
-	}
-	return $key;
-}
-function replace_joy_key($url, $key) {
-	$r = preg_match('#^(http://[^/]+/)[a-zA-Z0-9]+(/.+)$#', $url, $matches);
-	if ($r) {
-		$url = $matches[1] . $key . $matches[2];
-	}
-	return $url;
-}
-
 function real_empty($s) {
 	return $s === '' || $s === FALSE;
-}
-
-function obscure_name($name) {
-	$tag = substr(sha1("$name@$name"), 0, 6);
-	return "$name-h$tag";
 }
 
 function get_res_url($res_type, $path) {
