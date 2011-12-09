@@ -62,4 +62,31 @@ function image_round_corner(&$gdimg, $radius_x, $radius_y) { //{{{
 	return true;
 } //}}}
 
+function image_thumb($file, $thumb_file, $max_width, $max_height, $crop) { //{{{
+	/**
+	 * create thumb from $file and save to $thumb_file, keep proportional
+	 * @return true if successful else false
+	 */
+	try {
+		$thumb=new Imagick($file);
+
+		if ($max_width == 0 || $max_height == 0) {
+			$thumb->thumbnailImage($max_width, $max_height);
+		}
+		else {
+			if ($crop) {
+				# max 400x400, origin 1600x800 => 400x400 (resize and then crop)
+				$thumb->cropThumbnailImage($max_width, $max_height);
+			}
+			else {
+				# max 400x400, origin 1600x800 => 400x200
+				$thumb->thumbnailImage($max_width, $max_height, TRUE);
+			}
+		}
+		$thumb->writeImage($thumb_file);
+	} catch (Exception $e) {
+		return FALSE;
+	}
+	return TRUE;
+} //}}}
 // vim: fdm=marker
