@@ -45,7 +45,7 @@ function _get_log_msg($msgobjs) {
 	return $msg;
 }
 function dump_log($obj) { //{{{
-	require_once APPPATH . 'libs/spyc.php';
+	require_once APPPATH . 'third_party/spyc.php';
 	$msg = Spyc::YAMLDump($obj);
 	echo "<pre>$msg</pre>";
 } //}}}
