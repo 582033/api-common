@@ -1,11 +1,11 @@
 <?php
-function current_url() {
+function current_url() { //{{{
 	$CI =& get_instance();
 	$request_uri = $CI->input->server('REQUEST_URI');
 	$host = $CI->input->server('HTTP_HOST');
 	$url = "http://$host" . $request_uri;
 	return $url;
-}
+} //}}}
 
 function url_append_params($url, $params) { // {{{
 	/**
@@ -67,4 +67,20 @@ function url_remove_params($url, $keys) { // {{{
 		$url = $base_url;
 	}
 	return $url;
+} //}}}
+function post_request($url, $data) { //{{{
+	/**
+	 * data - array('k1' => 'v1', 'k2' => 'v2')
+	 */
+	$postdata = http_build_query($data);
+	$opts = array('http' =>
+			array(
+				'method'  => 'POST',
+				'header'  => 'Content-type: application/x-www-form-urlencoded',
+				'content' => $postdata
+				)
+			);
+	$context  = stream_context_create($opts);
+	$result = file_get_contents($url, false, $context);
+	return $result;
 } //}}}
