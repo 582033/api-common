@@ -89,17 +89,34 @@ function image_thumb($file, $thumb_file, $max_width, $max_height, $crop) { //{{{
 	}
 	return TRUE;
 } //}}}
-function image_resize($image, $imgInfo, $width, $height) { # {{{
+function image_resize($image, $imgInfo, $width, $height, $crop=FALSE) { # {{{
+	$w = imagesx($image);
+	$h = imagesy($image);
+
+	if($w < $width and $h < $height) return $image;
+
+	// resize
+	if($crop){
+		$ratio = max($width/$w, $height/$h);
+		$h = $height / $ratio;
+		$x = ($w - $width / $ratio) / 2;
+		$w = $width / $ratio;
+	}
+	else{
+		list($width, $height) = get_size_proportional($w, $h, $width, $height);
+		$x = 0;
+	}
+
 	$newImg = imagecreatetruecolor($width, $height);
 
-	/* Check if this image is PNG or GIF, then set if Transparent*/
+	/* preserve transparency for png/gif */
 	if(($imgInfo[2] == 1) OR ($imgInfo[2]==3)){
 		imagealphablending($newImg, false);
 		imagesavealpha($newImg,true);
 		$transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
 		imagefilledrectangle($newImg, 0, 0, $width, $height, $transparent);
 	}
-	imagecopyresampled($newImg, $image, 0, 0, 0, 0, $width, $height, $imgInfo[0], $imgInfo[1]);
+	imagecopyresampled($newImg, $image, 0, 0, $x, 0, $width, $height, $w, $h);
 
 	return $newImg;
 } # }}}
@@ -110,5 +127,15 @@ function image_add_logo($image, $logo_file) { //{{{
 	$logoh = imagesy($logo_img);
 	imagecopy($image, $logo_img, 0, imagesy($image) - $logoh, 0, 0, $logow, $logoh);
 	return $image;
+} //}}}
+function get_size_proportional($w0, $h0, $max_width, $max_height) { //{{{
+	if ($max_width / $w0 > $max_height / $h0) {
+		$width = round($w0 * $max_height/$h0);
+		$height = $max_height;
+	}else{
+		$width = $max_width;
+		$height = round($h0 * $max_width/$w0);
+	}
+	return array($width, $height);
 } //}}}
 // vim: fdm=marker
