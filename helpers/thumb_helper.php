@@ -100,10 +100,10 @@ function image_resize($image, $imgInfo, $width, $height, $fit='p', $allow_zoomin
 	// resize
 	switch ($fit) {
 		case 'c': # crop
-			$ratio = max($width/$w, $height/$h);
-			$h = $height / $ratio;
-			$x = ($w - $width / $ratio) / 2;
-			$w = $width / $ratio;
+			# 将想要的矩形(widthxheight)等比例缩放至刚好放到实际图片所围成的矩形(wxh)中, 得到宽度width1, height1
+			list($width1, $height1) = get_size_proportional($width, $height, $w, $h);
+			$x = ($w - $width1) / 2;
+			$y = ($h - $height1) / 2;
 			break;
 		case 'p': # proportional
 			list($width, $height) = get_size_proportional($w, $h, $width, $height);
