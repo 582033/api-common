@@ -98,35 +98,39 @@ function image_resize($image, $imgInfo, $width, $height, $fit='p', $allow_zoomin
 	}
 
 	// resize
+	$dst_w = $width;
+	$dst_h = $height;
+	$src_w = $w;
+	$src_h = $h;
+	$x = $y = 0;
 	switch ($fit) {
 		case 'c': # crop
-			# 将想要的矩形(widthxheight)等比例缩放至刚好放到实际图片所围成的矩形(wxh)中, 得到宽度width1, height1
-			list($width1, $height1) = get_size_proportional($width, $height, $w, $h);
-			$x = ($w - $width1) / 2;
-			$y = ($h - $height1) / 2;
+			# 将想要的矩形(widthxheight)等比例缩放至刚好放到实际图片所围成的矩形(wxh)中, 得到宽度src_w, src_h
+			list($src_w, $src_h) = get_size_proportional($width, $height, $w, $h);
+			$x = ($w - $src_w) / 2;
+			$y = ($h - $src_h) / 2;
+			#print_r("origin: $w x $h, given: $width x $height, given for fit: $src_w x $src_h, xy: $x,$y");
 			break;
 		case 'p': # proportional
-			list($width, $height) = get_size_proportional($w, $h, $width, $height);
-			$x = 0;
+			list($dst_w, $dst_h) = get_size_proportional($w, $h, $width, $height);
 			break;
 		case 's': # stretch
-			$x = 0;
 			break;
 		default:
 			show_error("Unknown fit param $fit");
 			break;
 	}
 
-	$newImg = imagecreatetruecolor($width, $height);
+	$newImg = imagecreatetruecolor($dst_w, $dst_h);
 
 	/* preserve transparency for png/gif */
 	if(($imgInfo[2] == 1) OR ($imgInfo[2]==3)){
 		imagealphablending($newImg, false);
 		imagesavealpha($newImg,true);
 		$transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
-		imagefilledrectangle($newImg, 0, 0, $width, $height, $transparent);
+		imagefilledrectangle($newImg, 0, 0, $dst_w, $dst_h, $transparent);
 	}
-	imagecopyresampled($newImg, $image, 0, 0, $x, 0, $width, $height, $w, $h);
+	imagecopyresampled($newImg, $image, 0, 0, $x, $y, $dst_w, $dst_h, $src_w, $src_h);
 
 	return $newImg;
 } # }}}
