@@ -89,24 +89,32 @@ function image_thumb($file, $thumb_file, $max_width, $max_height, $crop) { //{{{
 	}
 	return TRUE;
 } //}}}
-function image_resize($image, $imgInfo, $width, $height, $crop=FALSE, $stretch=FALSE) { # {{{
+function image_resize($image, $imgInfo, $width, $height, $fit='p', $allow_zoomin=FALSE) { # {{{
 	$w = imagesx($image);
 	$h = imagesy($image);
 
-	if (!$stretch) {
+	if (!$allow_zoomin) {
 		if($w < $width and $h < $height) return $image;
 	}
 
 	// resize
-	if($crop){
-		$ratio = max($width/$w, $height/$h);
-		$h = $height / $ratio;
-		$x = ($w - $width / $ratio) / 2;
-		$w = $width / $ratio;
-	}
-	else{
-		list($width, $height) = get_size_proportional($w, $h, $width, $height);
-		$x = 0;
+	switch ($fit) {
+		case 'c': # crop
+			$ratio = max($width/$w, $height/$h);
+			$h = $height / $ratio;
+			$x = ($w - $width / $ratio) / 2;
+			$w = $width / $ratio;
+			break;
+		case 'p': # proportional
+			list($width, $height) = get_size_proportional($w, $h, $width, $height);
+			$x = 0;
+			break;
+		case 's': # stretch
+			$x = 0;
+			break;
+		default:
+			show_error("Unknown fit param $fit");
+			break;
 	}
 
 	$newImg = imagecreatetruecolor($width, $height);
