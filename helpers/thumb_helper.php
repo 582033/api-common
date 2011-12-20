@@ -89,11 +89,13 @@ function image_thumb($file, $thumb_file, $max_width, $max_height, $crop) { //{{{
 	}
 	return TRUE;
 } //}}}
-function image_resize($image, $imgInfo, $width, $height, $crop=FALSE) { # {{{
+function image_resize($image, $imgInfo, $width, $height, $crop=FALSE, $stretch=FALSE) { # {{{
 	$w = imagesx($image);
 	$h = imagesy($image);
 
-	if($w < $width and $h < $height) return $image;
+	if (!$stretch) {
+		if($w < $width and $h < $height) return $image;
+	}
 
 	// resize
 	if($crop){
