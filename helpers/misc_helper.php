@@ -58,12 +58,20 @@ function get_res_url($res_type, $path) {
 	return $url;
 }
 
-function wget_contents($url) {
+function wget_contents($url, $proxy=FALSE) {
 	/**
+	 * proxy - ip:port
 	 * file_get_contents may hang, so use wget in this case
 	 * example hang url: http://minterface.tudou.com/api/video?key=GEYDEMZSGE2TIMJTGAYDAMJQGI2DCMRTHA&itemid=70096215&ip=211.103.252.242
 	 * see bug: http://bugs.php.net/bug.php?id=51330&thanks=6
 	 */
-    $content = `wget -o /dev/null -O - "$url"`;
+	if ($proxy) {
+		$extra = "-e http-proxy=$proxy --proxy=on";
+	}
+	else {
+		$extra = "";
+	}
+
+    $content = `wget $extra -o /dev/null -O - "$url"`;
     return $content;
 }
