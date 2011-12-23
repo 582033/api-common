@@ -72,6 +72,6 @@ function wget_contents($url, $proxy=FALSE) {
 		$extra = "";
 	}
 
-    $content = `wget $extra -o /dev/null -O - "$url"`;
+    $content = `wget $extra --timeout=45 --tries=1 -o /dev/null -O - "$url"`;
     return $content;
 }
