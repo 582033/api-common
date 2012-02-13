@@ -9,7 +9,10 @@ function array_copy(&$array, $keys) {
 	return $new_array;
 }
 
-function array_copy_to(&$to, &$from, $keys) {
+function array_copy_to(&$to, $from, $keys = NULL) {
+	if ($keys === NULL) {
+		$keys = array_keys($from);
+	}
 	foreach ($keys as $k) {
 		if (array_key_exists($k, $from)) {
 			$to[$k] = $from[$k];
