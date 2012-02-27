@@ -142,6 +142,16 @@ function image_add_logo($image, $logo_file) { //{{{
 	imagecopy($image, $logo_img, 0, imagesy($image) - $logoh, 0, 0, $logow, $logoh);
 	return $image;
 } //}}}
+function image_set_background($image, $r, $g, $b) { //{{{
+	// see http://stackoverflow.com/questions/2569970/gd-converting-a-png-image-to-jpeg-and-making-the-alpha-by-default-white-and-not
+	$width = imagesx($image);
+	$height = imagesy($image);
+	$new_image = imagecreatetruecolor($width, $height);
+	$white = imagecolorallocate($new_image,  $r, $g, $b);
+	imagefilledrectangle($new_image, 0, 0, $width, $height, $white);
+	imagecopy($new_image, $image, 0, 0, 0, 0, $width, $height);
+	return $new_image;
+} // }}}
 function get_size_proportional($w0, $h0, $max_width, $max_height) { //{{{
 	if ($max_width / $w0 > $max_height / $h0) {
 		$width = round($w0 * $max_height/$h0);
