@@ -27,3 +27,14 @@ function get_app_dir_name($package, $label, $version_code) {
 
 	return "$lpackage-$label_md5-$version_code";
 }
+
+function get_app_reskey($package, $label) { # {{{
+	if (!$package || !$label) {
+		return NULL;
+	}
+	else {
+		$lpackage = trim(strtolower($package));
+		$llabel = trim(strtolower($label));
+		return "$lpackage-$llabel";
+	}
+} # }}}
