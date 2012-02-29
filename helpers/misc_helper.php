@@ -60,9 +60,10 @@ function get_res_url($res_type, $path) {
 	return $url;
 }
 
-function wget_contents($url, $proxy=FALSE) {
+function wget_contents($url, $proxy=FALSE, $timeout=45) {
 	/**
 	 * proxy - ip:port
+	 * timeout - wget timeout param
 	 * file_get_contents may hang, so use wget in this case
 	 * example hang url: http://minterface.tudou.com/api/video?key=GEYDEMZSGE2TIMJTGAYDAMJQGI2DCMRTHA&itemid=70096215&ip=211.103.252.242
 	 * see bug: http://bugs.php.net/bug.php?id=51330&thanks=6
@@ -74,7 +75,7 @@ function wget_contents($url, $proxy=FALSE) {
 		$extra = "";
 	}
 
-    $content = `wget $extra --timeout=45 --tries=1 -o /dev/null -O - "$url"`;
+    $content = `wget $extra --timeout=$timeout --tries=1 -o /dev/null -O - "$url"`;
     return $content;
 }
 
