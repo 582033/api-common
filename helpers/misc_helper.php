@@ -77,3 +77,8 @@ function wget_contents($url, $proxy=FALSE) {
     $content = `wget $extra --timeout=10 --tries=1 -o /dev/null -O - "$url"`;
     return $content;
 }
+
+function get_json($url) {
+	$content = file_get_contents($url);
+	return json_decode($content, TRUE);
+}
