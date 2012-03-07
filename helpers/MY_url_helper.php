@@ -85,22 +85,37 @@ function post_request($url, $data) { //{{{
 	return $result;
 } //}}}
 
-function retrieve_remote_file_size($url, $headers=NULL) { //{{{
+function retrieve_url_info($url, $headers=NULL) { //{{{
+	/**
+	  return - the same with curl_getinfo, see http://cn2.php.net/manual/en/function.curl-getinfo.php
+	  important keys:
+		url, content_type, http_code, download_content_length
+	*/
+
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_NOBODY, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 	if ($headers) {
-		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-	}
-	$data = curl_exec($ch);
-	curl_close($ch);
-	$contentLength = 0;
-	if ($data !== false) {
-		if (preg_match('/Content-Length: (\d+)/', $data, $matches)) {
-			$contentLength = (int) $matches[1];
+		$http_headers = array();
+		foreach ($headers as $k => $v) {
+			$http_headers[] = "$k: $v";
 		}
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
 	}
-	return $contentLength;
+	$info = curl_getinfo($ch);
+	curl_close($ch);
+	return $info;
+} //}}}
+
+function retrieve_remote_file_size($url, $headers=NULL) { //{{{
+	$info = retrieve_url_info($url, $headers);
+	if ($info and $info['http_code'] == '200') {
+		$size = $info['download_content_length'];
+	}
+	else {
+		$size = 0;
+	}
+	return $size;
 } //}}}
