@@ -85,12 +85,15 @@ function post_request($url, $data) { //{{{
 	return $result;
 } //}}}
 
-function retrieve_remote_file_size($url) { //{{{
+function retrieve_remote_file_size($url, $headers=NULL) { //{{{
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_NOBODY, true);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	if ($headers) {
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	}
 	$data = curl_exec($ch);
 	curl_close($ch);
 	$contentLength = 0;
