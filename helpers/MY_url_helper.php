@@ -97,6 +97,7 @@ function retrieve_url_info($url, $headers=NULL) { //{{{
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HEADER, true);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	//curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 	if ($headers) {
 		$http_headers = array();
 		foreach ($headers as $k => $v) {
@@ -104,6 +105,7 @@ function retrieve_url_info($url, $headers=NULL) { //{{{
 		}
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
 	}
+	$data = curl_exec($ch);
 	$info = curl_getinfo($ch);
 	curl_close($ch);
 	return $info;
@@ -118,4 +120,43 @@ function retrieve_remote_file_size($url, $headers=NULL) { //{{{
 		$size = 0;
 	}
 	return $size;
+} //}}}
+
+function curl_get_contents($url, $headers, $bytes=0) { //{{{
+	/**
+	  bytes - the number of bytes to return. 0 means all
+	  return given bytes of the url in binary
+	 */
+
+	$ch = curl_init($url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+	curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+	if ($headers) {
+		$http_headers = array();
+		foreach ($headers as $k => $v) {
+			$http_headers[] = "$k: $v";
+		}
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $http_headers);
+	}
+	if ($bytes) {
+		$data = '';
+		$writefn = function($ch, $chunk) use (&$data, $bytes) {
+			$len = strlen($data) + strlen($chunk);
+			if ($len >= $bytes ) {
+				$data .= substr($chunk, 0, $bytes-strlen($data));
+				return -1;
+			}
+
+			$data .= $chunk;
+			return strlen($chunk);
+		};
+		curl_setopt($ch, CURLOPT_WRITEFUNCTION, $writefn);
+		curl_exec($ch);
+	}
+	else {
+		$data = curl_exec($ch);
+	}
+	curl_close($ch);
+	return $data;
 } //}}}
