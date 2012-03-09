@@ -24,7 +24,9 @@ function parse_apk_label_icon($manifest) { # {{{
 	}
 
     if ($label) {
-        $label = trim($label);
+		$CI =& get_instance();
+		$CI->load->helper('string');
+		$label = full_trim($label); # also trim u00a0 (nbsp)
 	}
 	if (!$label) {
 		$label = NULL;
