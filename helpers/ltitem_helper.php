@@ -1,8 +1,8 @@
 <?php
 
-function get_app_icon_path($package, $label) {
+function get_app_icon_path($package, $label, $version_code) {
 	/**
-	  return - <prefix>/package-label_md5[0:4].png
+	  return - <prefix>/package-label_md5[0:4]-version_code.png
 	  prefix = first 2 letter of the second part of package
 	 */
 
@@ -11,7 +11,7 @@ function get_app_icon_path($package, $label) {
 	$prefix = substr($parts[1], 0, 2);
 	$llabel = trim(strtolower($label));
 	$label_md5 = substr(md5($llabel), 0, 4);
-	$icon_path = "$prefix/$lpackage-$label_md5.png";
+	$icon_path = "$prefix/$lpackage-$label_md5-$version_code.png";
 	return $icon_path;
 }
 
