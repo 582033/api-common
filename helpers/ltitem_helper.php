@@ -98,3 +98,9 @@ if ( ! function_exists('get_enabled_name')) {
 		return is_app_type($type) ? 'enabled' : 'visible';
 	} //}}}
 }
+
+if (! function_exists('apkd_to_service_url')) {
+	function apkd_to_service_url($url) { //{{{
+		return str_replace('http://apkd.wowpad.cn/', 'http://service.wowpad.cn/download/apkd/', $url);
+	} //}}
+}
