@@ -104,3 +104,9 @@ if (! function_exists('apkd_to_service_url')) {
 		return str_replace('http://apkd.wowpad.cn/', 'http://service.wowpad.cn/download/apkd/', $url);
 	} //}}
 }
+
+if (! function_exists('get_thumb_url')) {
+	function get_thumb_url($img_url){//{{{
+		return "http://thumb.wowpad.cn/thumb?" . http_build_query(array('src' => $img_url));
+	}//}}}
+}
