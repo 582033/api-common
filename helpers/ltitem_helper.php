@@ -53,7 +53,7 @@ if ( ! function_exists('get_am_select')) {
 		 */
 
 		$keys = array(
-				'app' => array('a_category', 'a_tag', 'a_alias'),
+				'app' => array('a_category', 'a_tag', 'a_alias', 'a_name', 'a_intro', 'a_screenshots'),
 				'video' => array('a_category', 'a_tag', 'a_alias', 'a_area'),
 				'picture' => array('m_name', 'm_category', 'm_intro'),
 				);
