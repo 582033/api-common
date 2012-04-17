@@ -49,7 +49,7 @@ if ( ! function_exists('get_am_select')) {
 	function get_am_select($ntype, $p='') { // {{{
 		/**
 		 * ntype - video/app/picture
-		 * p - R/I
+		 * p - R./I.
 		 */
 
 		$keys = array(
