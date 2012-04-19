@@ -32,7 +32,7 @@ function get_csv($rows) {
 
 function export_csv($rows, $filename) {
 	$csv = get_csv($rows);
-	$csv_gbk = iconv( "UTF-8", "gbk" , $csv);
+	$csv_gbk = iconv( "UTF-8", "gbk//IGNORE" , $csv);
 	header('Content-Type: text/csv');
 	header("Pragma: no-cache");
 	header("Content-Disposition: attachment;filename=$filename" );
