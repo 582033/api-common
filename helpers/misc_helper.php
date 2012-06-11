@@ -5,7 +5,7 @@ function is_inner_ip() {
 	if ($is_inner_ip === 'auto') {
 		$rip = $_SERVER['REMOTE_ADDR'];
 		$is_inner_ip = (
-				in_array($rip, array('211.103.252.242', '114.242.12.23')) ||
+				in_array($rip, array('211.103.252.242', '114.242.12.23', '124.42.28.170')) ||
 				preg_match('/^(192.168|10\.)/', $rip)
 				);
 	}
