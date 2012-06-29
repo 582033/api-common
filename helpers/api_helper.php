@@ -33,6 +33,14 @@ function request($url,$params=array(),$requestMethod='GET',$jsonDecode=true,$hea
 						$url.=http_build_query($params);
 					}
 				}
+				break;
+			case 'PUT':
+				if($params) {
+					$params = (is_array($params)) ? http_build_query($params) : $params; 
+					curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'PUT'); 
+					curl_setopt($ci, CURLOPT_POSTFIELDS, $fields);
+				}
+				break;
 		}
 		//$headers[] = "APIWWW: " . $_SERVER['REMOTE_ADDR'];
 		curl_setopt($ci, CURLOPT_URL, $url );
