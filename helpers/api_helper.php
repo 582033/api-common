@@ -17,6 +17,9 @@ function request($url,$params=array(),$requestMethod='GET',$jsonDecode=true,$hea
 				if ($params) {
 					curl_setopt($ci, CURLOPT_POSTFIELDS, $params);
 				}
+				else {
+					curl_setopt($ci, CURLOPT_POSTFIELDS, ''); // Don't know why: if not set,  413 Request Entity Too Large
+				}
 				break;
 			case 'DELETE':
 				curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'DELETE');
