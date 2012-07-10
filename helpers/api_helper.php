@@ -39,9 +39,8 @@ function request($url,$params=array(),$requestMethod='GET',$jsonDecode=true,$hea
 				break;
 			case 'PUT':
 				if($params) {
-					$params = (is_array($params)) ? http_build_query($params) : $params; 
-					curl_setopt($ci, CURLOPT_CUSTOMREQUEST, 'PUT'); 
-					curl_setopt($ci, CURLOPT_POSTFIELDS, $fields);
+					curl_setopt($ci, CURLOPT_CUSTOMREQUEST, "PUT");                                                                     
+					curl_setopt($ci, CURLOPT_POSTFIELDS, $params);                                                                  
 				}
 				break;
 		}
