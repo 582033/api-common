@@ -53,7 +53,7 @@ function request($url,$params=array(),$requestMethod='GET',$jsonDecode=true,$hea
 		$httpCode = curl_getinfo($ci, CURLINFO_HTTP_CODE);
 		$return = array(
 			'httpcode' => $httpCode,
-			'data' => $jsonDecode?json_decode($response,true):$response
+			'data' => $httpCode >= 300 ? $response : ($jsonDecode ? json_decode($response,true) : $response),
 		);
 		//$httpInfo = curl_getinfo($ci);
 		curl_close ($ci);
