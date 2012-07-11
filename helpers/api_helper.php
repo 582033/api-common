@@ -11,6 +11,7 @@ function request($url,$params=array(),$requestMethod='GET',$jsonDecode=true,$hea
 		curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ci, CURLOPT_HEADER, FALSE);
 		
+		$requestMethod = strtoupper($requestMethod);
 		switch ($requestMethod) {
 			case 'POST':
 				curl_setopt($ci, CURLOPT_POST, TRUE);
@@ -29,12 +30,8 @@ function request($url,$params=array(),$requestMethod='GET',$jsonDecode=true,$hea
 				break;
 			case 'GET':
 				if($params) {
-					if(false === strpos($url,'?')) {
-						$url.= '?'.http_build_query($params);
-					}
-					else {
-						$url.=http_build_query($params);
-					}
+					$sep = false === strpos($url,'?') ? '?' : '&';
+					$url .= $sep . http_build_query($params);
 				}
 				break;
 			case 'PUT':
