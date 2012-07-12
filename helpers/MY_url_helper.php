@@ -160,3 +160,10 @@ function curl_get_contents($url, $headers, $bytes=0) { //{{{
 	curl_close($ch);
 	return $data;
 } //}}}
+
+if (!function_exists('redirect_to_referer')) {
+	function redirect_to_referer() {
+		$referer = $_SERVER['HTTP_REFERER'];
+		redirect($referer);
+	}
+}
