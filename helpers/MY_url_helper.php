@@ -7,6 +7,26 @@ function current_url() { //{{{
 	return $url;
 } //}}}
 
+if ( ! function_exists('redirect')) { // {{{{
+    function redirect($uri = '', $method = 'auto', $http_response_code = 302)
+    {
+        // IIS environment likely? Use 'refresh' for better compatibility
+        if (DIRECTORY_SEPARATOR != '/' && $method == 'auto')
+        {
+            $method = 'refresh';
+        }
+
+        switch($method)
+        {
+            case 'refresh'  : header("Refresh:0;url=".$uri);
+                break;
+            default         : header("Location: ".$uri, TRUE, $http_response_code);
+                break;
+        }
+        exit;
+    }
+} // }}}
+
 function url_append_params($url, $params) { // {{{
 	/**
 	 * Replace or append param, ignore empty one
